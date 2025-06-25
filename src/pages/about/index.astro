@@ -1,7 +1,6 @@
 ---
-import "../styles/global.css";
+import "@/styles/global.css";
 // Component Imports
-import { Button } from "@/components/ui/button";
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -13,15 +12,12 @@ import { Button } from "@/components/ui/button";
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro + TailwindCSS</title>
+    <title>About</title>
   </head>
 
   <body>
     <div class="grid place-items-center h-screen content-center">
-      <Button>Tailwind Button in Astro!</Button>
-      <a href="/markdown-page" class="p-4 underline"
-        >Markdown is also supported...</a
-      >
+      <h1>About</h1>
     </div>
   </body>
 </html>
