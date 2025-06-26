@@ -7,6 +7,8 @@ import react from "@astrojs/react";
 
 import sanity from "@sanity/astro";
 
+import vercel from "@astrojs/vercel";
+
 const SANITY_STUDIO_PROJECT_ID = process.env.SANITY_STUDIO_PROJECT_ID;
 const SANITY_STUDIO_DATASET = process.env.SANITY_STUDIO_DATASET;
 
@@ -25,4 +27,6 @@ export default defineConfig({
       studioBasePath: "/admin",
     }),
   ],
+
+  adapter: vercel(),
 });
