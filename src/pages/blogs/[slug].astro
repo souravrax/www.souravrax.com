@@ -1,0 +1,24 @@
+---
+import PortableText from "@/components/PortableText.astro";
+import { sanityClient } from "sanity:client";
+
+const { slug } = Astro.params;
+
+export const getStaticPaths = async () => {
+  const blogs = await sanityClient.fetch<{ slug: { current: string } }[]>(
+    `*[_type == "blog" && defined(slug)] | order(publishedAt desc)`
+  );
+  return blogs.map((blog) => ({
+    params: { slug: blog.slug.current },
+  }));
+};
+
+const blog = await sanityClient.fetch<{ title: string; content: any[] }>(
+  `*[_type == "blog" && slug.current == "${slug}"][0]`
+);
+
+console.log(blog);
+---
+
+<h1>{blog.title}</h1>
+<PortableText value={blog.content} />

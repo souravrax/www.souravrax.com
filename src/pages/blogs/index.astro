@@ -1,0 +1,21 @@
+---
+// /blogs/index.astro
+import { sanityClient } from "sanity:client";
+
+const blogs = await sanityClient.fetch(
+  `*[_type == "blog" && defined(slug)] | order(publishedAt desc)`
+);
+---
+
+<h1>Blogs</h1>
+<ul>
+  {
+    blogs.map((blog: any) => (
+      <li>
+        <a href={"/blogs/" + blog.slug.current} class="post-link">
+          {blog.title}
+        </a>
+      </li>
+    ))
+  }
+</ul>
