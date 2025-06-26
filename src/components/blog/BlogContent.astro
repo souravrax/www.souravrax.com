@@ -1,0 +1,35 @@
+---
+import PortableText from "@/components/PortableText.astro";
+
+interface Props {
+  title: string;
+  mainImage?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+  body: any[];
+}
+
+const { title, mainImage, body } = Astro.props;
+---
+
+{
+  mainImage && (
+    <div class="mb-12">
+      <img
+        src={mainImage.asset.url}
+        alt={mainImage.alt || title}
+        class="w-full h-auto rounded-base border-2 border-border shadow-shadow"
+      />
+    </div>
+  )
+}
+
+<!-- Content -->
+<div
+  class="prose prose-lg max-w-none text-foreground [&>*]:text-foreground [&>h1]:text-foreground [&>h2]:text-foreground [&>h3]:text-foreground [&>h4]:text-foreground [&>h5]:text-foreground [&>h6]:text-foreground [&>p]:text-foreground [&>li]:text-foreground [&>blockquote]:text-foreground/80 [&>blockquote]:border-l-main [&>code]:text-main [&>pre]:bg-secondary-background [&>pre]:border-2 [&>pre]:border-border"
+>
+  <PortableText value={body} />
+</div>

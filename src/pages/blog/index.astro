@@ -1,0 +1,73 @@
+---
+import { sanityClient } from "sanity:client";
+import Layout from "@/layouts/blog-layout.astro";
+
+type Author = {
+  _id: string;
+  name: string;
+  title: string;
+  portrait?: {
+    asset: {
+      url: string;
+    };
+  };
+  bio?: string;
+};
+
+type Blog = {
+  _id: string;
+  title: string;
+  slug: {
+    current: string;
+  };
+  date: string;
+  image?: {
+    asset: {
+      url: string;
+    };
+    alt?: string;
+  };
+  author: Author;
+  content: any[];
+};
+
+const blogs = await sanityClient.fetch<Blog[]>(
+  `*[_type == "blog" && defined(slug)] | order(publishedAt desc)`
+);
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+console.log(blogs);
+---
+
+<Layout content={{ title: "Blog - Latest Posts" }}>
+  <div class="relative -top-[10px] flex flex-col gap-8">
+    {
+      blogs.map((blog) => (
+        <a
+          class="block py-4 hover:scale-[1.005] will-change-transform scale-100 active:scale-100"
+          href={`/blog/${blog.slug.current}`}
+        >
+          <article>
+            <h2
+              class="text-[28px] font-black leading-none mb-2 text-[--lightLink] dark:text-[--darkLink]"
+              transition:name={`blog-${blog.title}`}
+            >
+              {blog.title}
+            </h2>
+            <p class="text-[13px] text-gray-700 dark:text-gray-300">
+              {formatDate(blog.publishedAt)}
+            </p>
+            {/* <p class="mt-1">{blog.excerpt}</p> */}
+          </article>
+        </a>
+      ))
+    }
+  </div>
+</Layout>

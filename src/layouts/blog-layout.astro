@@ -1,0 +1,20 @@
+---
+import Header from "@/layouts/Header.astro";
+import { ClientRouter } from 'astro:transitions'
+import "../styles/global.css";
+const { content } = Astro.props;
+---
+
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{content.title}</title>
+    <ClientRouter />
+  </head>
+  <body class="mx-auto max-w-2xl bg-background px-5 py-12 text-foreground">
+    <Header author="Sourav Rakshit" />
+    <slot />
+  </body>
+</html>

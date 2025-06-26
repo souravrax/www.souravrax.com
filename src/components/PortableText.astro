@@ -18,8 +18,9 @@ const components: Parameters<typeof PortableTextInternal>[0]["components"] = {
   //     internalLink: InternalLink,
   //   },
 };
-
-console.log(Astro.props);
 ---
 
-<PortableTextInternal value={Astro.props.value} components={components} />
+<PortableTextInternal
+  value={Astro.props.value}
+  components={components}
+/>

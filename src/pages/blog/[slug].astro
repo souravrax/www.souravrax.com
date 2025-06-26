@@ -1,0 +1,85 @@
+---
+import { sanityClient } from "sanity:client";
+import Layout from "@/layouts/blog-layout.astro";
+import BlogHeader from "@/components/blog/BlogHeader.astro";
+import BlogContent from "@/components/blog/BlogContent.astro";
+import BlogCallToAction from "@/components/blog/BlogCallToAction.astro";
+import BlogNewsletter from "@/components/blog/BlogNewsletter.astro";
+import BlogRelatedPosts from "@/components/blog/BlogRelatedPosts.astro";
+import type { Blog } from "@/components/blog/types";
+
+const { slug } = Astro.params;
+
+export const getStaticPaths = async () => {
+  const blogs = await sanityClient.fetch<{ slug: { current: string } }[]>(
+    `*[_type == "blog" && defined(slug)] | order(publishedAt desc)`
+  );
+  return blogs.map((blog) => ({
+    params: { slug: blog.slug.current },
+  }));
+};
+
+const blog = await sanityClient.fetch<Blog>(
+  `*[_type == "blog" && slug.current == "${slug}"][0]{
+    _id,
+    title,
+    slug,
+    publishedAt,
+    mainImage{
+      asset->{url},
+      alt
+    },
+    author->{
+      _id,
+      name,
+      title,
+      portrait{
+        asset->{url}
+      },
+      bio,
+      website
+    },
+    body,
+    categories[]->{
+      _id,
+      title,
+      slug
+    },
+    callToAction
+  }`
+);
+
+if (!blog) {
+  return Astro.redirect("/404");
+}
+
+const formatReadingTime = (content: any[]) => {
+  const text = JSON.stringify(content);
+  const wordCount = text.split(/\s+/).length;
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+  return `${readingTime} min read`;
+};
+---
+
+<Layout content={{ title: blog.title }}>
+  <BlogHeader
+    title={blog.title}
+    publishedAt={blog.publishedAt}
+    categories={blog.categories}
+    readingTime={formatReadingTime(blog.body)}
+  />
+
+  <article class="prose prose-lg max-w-none">
+    <BlogContent
+      title={blog.title}
+      mainImage={blog.mainImage}
+      body={blog.body}
+    />
+  </article>
+
+  <BlogCallToAction callToAction={blog.callToAction} />
+
+  <BlogNewsletter />
+
+  <BlogRelatedPosts />
+</Layout>
