@@ -23,6 +23,14 @@ type Author = {
   };
 };
 
+type Category = {
+  _id: string;
+  title: string;
+  slug: {
+    current: string;
+  };
+};
+
 type CallToAction = {
   label: string;
   url: {
@@ -37,21 +45,22 @@ type Blog = {
   slug: {
     current: string;
   };
-  date: string;
-  image?: {
+  publishedAt: string;
+  mainImage?: {
     asset: {
       url: string;
     };
     alt?: string;
   };
   author: Author;
-  content: any[];
+  body: any[];
+  categories?: Category[];
   callToAction?: CallToAction;
 };
 
 export const getStaticPaths = async () => {
   const blogs = await sanityClient.fetch<{ slug: { current: string } }[]>(
-    `*[_type == "blog" && defined(slug)] | order(date desc)`
+    `*[_type == "blog" && defined(slug)] | order(publishedAt desc)`
   );
   return blogs.map((blog) => ({
     params: { slug: blog.slug.current },
@@ -59,12 +68,12 @@ export const getStaticPaths = async () => {
 };
 
 const blog = await sanityClient.fetch<Blog>(
-  `*[_type == "blog" && slug.current == "${slug}"][0] {
+  `*[_type == "blog" && slug.current == "${slug}"][0]{
     _id,
     title,
     slug,
-    date,
-    image {
+    publishedAt,
+    mainImage{
       asset->{url},
       alt
     },
@@ -72,13 +81,18 @@ const blog = await sanityClient.fetch<Blog>(
       _id,
       name,
       title,
-      portrait {
+      portrait{
         asset->{url}
       },
       bio,
       website
     },
-    content,
+    body,
+    categories[]->{
+      _id,
+      title,
+      slug
+    },
     callToAction
   }`
 );
@@ -86,6 +100,8 @@ const blog = await sanityClient.fetch<Blog>(
 if (!blog) {
   return Astro.redirect("/404");
 }
+
+console.log(blog);
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
@@ -120,13 +136,28 @@ const formatReadingTime = (content: any[]) => {
       <article class="prose prose-lg max-w-none">
         <!-- Header -->
         <header class="mb-12">
-          <div class="flex items-center gap-4 mb-6">
+          <div class="flex items-center gap-4 mb-6 flex-wrap">
             <Badge variant="neutral" className="text-sm">
-              {formatDate(blog.date)}
+              {formatDate(blog.publishedAt)}
             </Badge>
             <span class="text-foreground/60 text-sm">
-              {formatReadingTime(blog.content)}
+              {formatReadingTime(blog.body)}
             </span>
+            {
+              blog.categories && blog.categories.length > 0 && (
+                <div class="flex items-center gap-2 flex-wrap">
+                  {blog.categories.map((category) => (
+                    <Badge
+                      key={category._id}
+                      variant="default"
+                      className="text-xs"
+                    >
+                      {category.title}
+                    </Badge>
+                  ))}
+                </div>
+              )
+            }
           </div>
 
           <h1
@@ -180,11 +211,11 @@ const formatReadingTime = (content: any[]) => {
 
         <!-- Featured image -->
         {
-          blog.image && (
+          blog.mainImage && (
             <div class="mb-12">
               <img
-                src={blog.image.asset.url}
-                alt={blog.image.alt || blog.title}
+                src={blog.mainImage.asset.url}
+                alt={blog.mainImage.alt || blog.title}
                 class="w-full h-auto rounded-base border-2 border-border shadow-shadow"
               />
             </div>
@@ -195,7 +226,7 @@ const formatReadingTime = (content: any[]) => {
         <div
           class="prose prose-lg max-w-none text-foreground [&>*]:text-foreground [&>h1]:text-foreground [&>h2]:text-foreground [&>h3]:text-foreground [&>h4]:text-foreground [&>h5]:text-foreground [&>h6]:text-foreground [&>p]:text-foreground [&>li]:text-foreground [&>blockquote]:text-foreground/80 [&>blockquote]:border-l-main [&>code]:text-main [&>pre]:bg-secondary-background [&>pre]:border-2 [&>pre]:border-border"
         >
-          <PortableText value={blog.content} />
+          <PortableText value={blog.body} />
         </div>
       </article>
 

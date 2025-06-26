@@ -1,24 +1,52 @@
-import { defineType, defineField } from "sanity";
+// ./src/sanity/schemaTypes/author.ts
+import { defineField, defineType } from "sanity";
 
-export const author = defineType({
-  type: "document",
+export const authorType = defineType({
   name: "author",
-  title: "Author",
+  type: "document",
   fields: [
     defineField({
-      type: "string",
       name: "name",
-      title: "Name",
-      validation: (e) => e.required(),
+      type: "string",
     }),
     defineField({
-      type: "string",
-      name: "title",
-      title: "Title",
-      validation: (e) => e.required(),
+      name: "slug",
+      type: "slug",
+      options: {
+        source: "name",
+        maxLength: 96,
+      },
     }),
-    defineField({ type: "image", name: "portrait", title: "Portrait" }),
-    defineField({ type: "text", name: "bio", title: "Bio" }),
-    defineField({ type: "slug", name: "website", title: "Website" }),
+    defineField({
+      name: "image",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
+        },
+      ],
+    }),
+    defineField({
+      name: "bio",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [{ title: "Normal", value: "normal" }],
+          lists: [],
+        },
+      ],
+    }),
   ],
+  preview: {
+    select: {
+      title: "name",
+      media: "image",
+    },
+  },
 });

@@ -24,7 +24,7 @@ export default defineConfig({
       projectId: SANITY_STUDIO_PROJECT_ID,
       dataset: SANITY_STUDIO_DATASET,
       useCdn: false,
-      studioBasePath: "/admin",
+      studioBasePath: "/studio",
     }),
   ],
 

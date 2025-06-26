@@ -1,6 +1,8 @@
-import { blog } from "./blogType";
-import { author } from "./authorType";
+import { blogType } from "./blog";
+import { authorType } from "./authorType";
 import { callToAction } from "./ctaType";
+import { categoryType } from "./categoryType";
+import { blockContentType } from "./blockContentType";
 
 // Resume-related types
 import { resume } from "./resumeType";
@@ -13,28 +15,11 @@ import { language } from "./languageType";
 import { award } from "./awardType";
 import { volunteerExperience } from "./volunteerType";
 
-// Re-export all types
-export {
-  blog,
-  author,
-  callToAction,
-  resume,
-  workExperience,
-  education,
-  skill,
-  skillCategory,
-  project,
-  certification,
-  language,
-  award,
-  volunteerExperience,
-};
-
-// Schema types array for Sanity config
 export const schemaTypes = [
-  // Existing types
-  author,
-  blog,
+  authorType,
+  blogType,
+  categoryType,
+  blockContentType,
   callToAction,
 
   // Resume types
