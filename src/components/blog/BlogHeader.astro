@@ -1,6 +1,6 @@
 ---
 import { Badge } from "@/components/ui/badge";
-import type { Author, Category } from "./types";
+import type { Category } from "./types";
 
 interface Props {
   title: string;
@@ -18,10 +18,15 @@ const formatDate = (dateString: string) => {
     day: "numeric",
   });
 };
-
 ---
 
 <header class="mb-12">
+  <h1
+    class="text-4xl md:text-5xl font-heading text-foreground mb-8 leading-tight"
+    transition:name={`blog-${title}`}
+  >
+    {title}
+  </h1>
   <div class="flex items-center gap-4 mb-6 flex-wrap">
     <Badge variant="outline" className="text-sm">
       {formatDate(publishedAt)}
@@ -41,11 +46,4 @@ const formatDate = (dateString: string) => {
       )
     }
   </div>
-
-  <h1
-    class="text-4xl md:text-5xl font-heading text-foreground mb-8 leading-tight"
-    transition:name={`blog-${title}`}
-  >
-    {title}
-  </h1>
 </header>

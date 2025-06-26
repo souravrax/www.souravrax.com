@@ -10,6 +10,11 @@ export const blogType = defineType({
       type: "string",
     }),
     defineField({
+      name: "excerpt",
+      type: "text",
+      rows: 1,
+    }),
+    defineField({
       name: "slug",
       type: "slug",
       options: {
