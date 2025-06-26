@@ -69,7 +69,7 @@ export default function Header() {
           "flex flex-col items-end uppercase text-lg gap-1.5"
         )}
       >
-        <AnimatedLink id="blog-link" variants={headerChild} href="/blogs">
+        <AnimatedLink id="blog-link" variants={headerChild} href="/blog">
           Blog
         </AnimatedLink>
         <AnimatedLink
