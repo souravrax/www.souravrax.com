@@ -20,7 +20,20 @@ const components: Parameters<typeof PortableTextInternal>[0]["components"] = {
 };
 ---
 
-<PortableTextInternal
-  value={Astro.props.value}
-  components={components}
-/>
+<div class="portable-text">
+  <PortableTextInternal value={Astro.props.value} components={components} />
+</div>
+
+<style>
+  .portable-text {
+    font-size: 20px;
+  }
+
+  .portable-text :global(> *) {
+    margin-bottom: 16px;
+  }
+
+  .portable-text :global(> *:last-child) {
+    margin-bottom: 0;
+  }
+</style>
