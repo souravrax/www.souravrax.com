@@ -85,6 +85,9 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+
+  --font-khand: "Khand", "sans-serif";
+  --font-array: "Array", "sans-serif";
 }
 
 @layer base {
@@ -109,4 +112,20 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+  font-family: "Khand";
+  src: url("/fonts/Khand/Khand-Regular.woff2") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Array";
+  src: url("/fonts/Array/Array-Regular.woff2") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }

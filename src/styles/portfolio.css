@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --accent: #b3ffb3;
+  --accent-foreground: #4c956c;
+  --background: #020100;
+  --foreground: #fff;
+}
+
+@theme inline {
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-khand: "Khand", "sans-serif";
+  --font-array: "Array", "sans-serif";
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  body {
+    @apply bg-background;
+    @apply text-foreground;
+    min-width: 350px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 24 24"><path fill="%23FFF" stroke="%23000" stroke-width="1.25" d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.35Z"></path></svg>');
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-accent;
+    @apply rounded-full;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent-foreground;
+  }
+}
+
+@layer components {
+  .nav {
+    @apply flex gap-2 justify-center items-center;
+  }
+  .wavy-phrase-container {
+    @apply relative h-4 overflow-hidden flex flex-col;
+  }
+  .wavy-phrase {
+    @apply flex;
+  }
+}
+
+@font-face {
+  font-family: "Khand";
+  src: url("/fonts/Khand/Khand-Regular.woff2") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Array";
+  src: url("/fonts/Array/Array-Regular.woff2") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

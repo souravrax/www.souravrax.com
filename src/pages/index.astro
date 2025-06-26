@@ -1,27 +1,56 @@
 ---
-import "../styles/global.css";
-// Component Imports
-import { Button } from "@/components/ui/button";
-
-// Full Astro Component Syntax:
-// https://docs.astro.build/basics/astro-components/
+import "@/styles/portfolio.css";
+import MouseBall from "@/components/MouseBall";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import SmoothScroll from "@/components/SmoothScroll";
+import SVGPath from "@/components/SVGPath";
+import Projects from "@/components/Projects";
+import Photography from "@/components/Photography";
+import Footer from "@/components/Footer";
+import Link from "@/components/Link";
+import { cn } from "@/lib/utils";
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro + TailwindCSS</title>
+    <title>Sourav Rakshit</title>
+    <meta name="description" content="Sourav Rakshit" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
   </head>
-
   <body>
-    <div class="grid place-items-center h-screen content-center">
-      <Button>Tailwind Button in Astro!</Button>
-      <a href="/markdown-page" class="p-4 underline"
-        >Markdown is also supported...</a
-      >
-    </div>
+    <SmoothScroll client:load>
+      <MouseBall client:load />
+      <Header client:load />
+      <main>
+        <Hero client:load />
+        <SVGPath client:load />
+        <Projects client:load />
+        <Photography client:load />
+        <section class="h-[50vh] flex items-center justify-center">
+          <h1 class={cn("font-array", "text-7xl text-center")}>
+            Checkout more on my
+            <br />
+            <Link
+              href="https://www.instagram.com/rax.lens/"
+              target="_blank"
+              className="inline-block items-center gap-8 text-accent hover:underline"
+            >
+              @Instagram
+            </Link>
+          </h1>
+        </section>
+        <Footer client:load />
+      </main>
+    </SmoothScroll>
   </body>
 </html>
