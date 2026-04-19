@@ -26,14 +26,12 @@ export function SnakeGame(props: { onQuit: () => void }) {
         score: 0
     });
     
-    // Using a ref for the direction to ensure the event listener doesn't mutate state asynchronously
-    // before the tick processes
     const pendingDirRef = useRef<Point>({ x: 1, y: 0 });
 
     useEffect(() => {
         let frameId: number;
         let lastTime: number = performance.now();
-        const tickRate = 120; // Move every 120ms
+        const tickRate = 120;
         
         const generateFood = (currentSnake: Point[]): Point => {
             let newFood: Point = { x: 0, y: 0 };
@@ -72,14 +70,12 @@ export function SnakeGame(props: { onQuit: () => void }) {
                     y: head.y + currentDir.y
                 };
                 
-                // Collision with walls
                 if (newHead.x < 0 || newHead.x >= GRID_SIZE || newHead.y < 0 || newHead.y >= GRID_SIZE) {
                     currentState.gameOver = true;
                     renderHook[1](renderHook[0] + 1);
                     return;
                 }
                 
-                // Collision with self
                 for (let i = 0; i < currentState.snake.length; i++) {
                     if (currentState.snake[i].x === newHead.x && currentState.snake[i].y === newHead.y) {
                         currentState.gameOver = true;
@@ -98,7 +94,6 @@ export function SnakeGame(props: { onQuit: () => void }) {
                 }
                 
                 currentState.snake = newSnake;
-                // Force a re-render
                 renderHook[1](time);
             }
             
@@ -130,7 +125,6 @@ export function SnakeGame(props: { onQuit: () => void }) {
 
     const currentState = stateRef.current;
     
-    // Build the grid strings
     let gridStrings = [];
     for (let y = 0; y < GRID_SIZE; y++) {
         let rowStr = '';
@@ -152,18 +146,18 @@ export function SnakeGame(props: { onQuit: () => void }) {
     }
     
     return (
-        <div className="h-full flex flex-col justify-center items-center text-[#8792A2] font-['Geist_Mono'] select-none">
-            <div className="mb-4 text-[#00D4FF] text-xl font-bold flex justify-between w-full max-w-[400px]">
+        <div className="h-full flex flex-col justify-center items-center text-[var(--os-text)] font-mono select-none">
+            <div className="mb-4 text-[var(--os-accent-secondary)] text-xl font-bold flex justify-between w-full max-w-[400px]">
                 <span>SNAKE</span>
                 <span>SCORE: {currentState.score}</span>
             </div>
             
-            <div className="bg-black/30 p-4 border border-[#FFFFFF]/10 rounded-lg shadow-[0_0_15px_rgba(0,212,255,0.1)]">
+            <div className="bg-[var(--os-titlebar-bg)]/30 p-4 border border-[var(--os-text)]/10 rounded-lg">
                 {gridStrings.map((row, idx) => (
                     <div key={idx} className="tracking-widest whitespace-pre h-6 flex items-center">
                         {row.split('').map((char, cidx) => {
-                            if (char === '★') return <span key={cidx} className="text-[#00D4FF]">{char}</span>;
-                            if (char === '▣' || char === '■') return <span key={cidx} className="text-[#635BFF]">{char}</span>;
+                            if (char === '★') return <span key={cidx} className="text-cyan-400">{char}</span>;
+                            if (char === '▣' || char === '■') return <span key={cidx} className="text-[var(--os-accent-secondary)]">{char}</span>;
                             return <span key={cidx} className="opacity-30">{char}</span>;
                         })}
                     </div>
@@ -171,9 +165,9 @@ export function SnakeGame(props: { onQuit: () => void }) {
             </div>
             
             {currentState.gameOver && (
-                <div className="mt-6 text-center text-red-400 font-bold animate-pulse">
+                <div className="mt-6 text-center text-red-500 font-bold animate-pulse">
                     <div>GAME OVER</div>
-                    <div className="text-sm mt-2 text-[#8792A2] cursor-pointer hover:text-white" onClick={() => {
+                    <div className="text-sm mt-2 text-[var(--os-text)]/60 cursor-pointer hover:text-white" onClick={() => {
                         stateRef.current = {
                             snake: [{ x: 10, y: 10 }],
                             food: { x: 15, y: 5 },
@@ -190,7 +184,7 @@ export function SnakeGame(props: { onQuit: () => void }) {
             )}
             
             <div 
-                className="mt-8 text-sm cursor-pointer hover:text-white border border-[#8792A2]/30 px-4 py-2 rounded transition-colors duration-200"
+                className="mt-8 text-sm cursor-pointer hover:text-white border border-[var(--os-text)]/30 px-4 py-2 rounded transition-colors duration-200"
                 onClick={props.onQuit}
             >
                 [ Quit Module ]

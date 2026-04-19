@@ -1,4 +1,6 @@
-import { useKernel } from '../Core/Kernel';
+import { useKernelStore } from '@/system/KernelStore';
+import { useSettings } from '@/system/SettingsStore';
+import { Panel } from '../Core/UI/Primitives';
 
 interface ContextMenuProps {
     x: number;
@@ -7,12 +9,13 @@ interface ContextMenuProps {
 }
 
 export function ContextMenu(props: ContextMenuProps) {
-    const openApp = useKernel(state => state.openApp);
-    const wallpaperIndex = useKernel(state => state.wallpaperIndex);
-    const setWallpaper = useKernel(state => state.setWallpaper);
+    const openApp = useKernelStore(state => state.openApp);
+    const wallpaperIndex = useSettings(state => state.wallpaperIndex);
+    const setWallpaper = useSettings(state => state.setWallpaper);
 
     const handleChangeWallpaper = () => {
-        setWallpaper(wallpaperIndex === 0 ? 1 : 0);
+        const nextIndex = (wallpaperIndex + 1) % 6;
+        setWallpaper(nextIndex);
         props.onClose();
     };
 
@@ -22,22 +25,23 @@ export function ContextMenu(props: ContextMenuProps) {
     };
 
     return (
-        <div 
-            className="absolute z-[2000] w-48 stripe-glass rounded-lg border border-black/20 dark:border-white/10 py-1 shadow-2xl animate-in fade-in zoom-in duration-150"
+        <Panel 
+            size="sm"
+            className="absolute z-[2000] w-52 py-1 font-mono uppercase"
             style={{ left: `${props.x}px`, top: `${props.y}px` }}
         >
-            <ContextItem label="Change Wallpaper" onClick={handleChangeWallpaper} />
-            <ContextItem label="Open Terminal" onClick={handleOpenTerminal} />
-            <hr className="my-1 border-black/10 dark:border-white/5" />
-            <ContextItem label="System Preferences" onClick={() => {}} />
-        </div>
+            <ContextItem label="CYCLE_BACKDROP" onClick={handleChangeWallpaper} />
+            <ContextItem label="SPAWN_TERMINAL" onClick={handleOpenTerminal} />
+            <div className="h-1 bg-[var(--os-border)] my-1 mx-1"></div>
+            <ContextItem label="CONFIG_SYSTEM" onClick={() => { openApp('settings'); props.onClose(); }} />
+        </Panel>
     );
 }
 
 function ContextItem(props: { label: string; onClick: () => void }) {
     return (
         <div 
-            className="px-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 hover:bg-[#635BFF] hover:text-white cursor-default transition-colors"
+            className="px-4 py-2 text-[10px] font-black text-[var(--os-text)] hover:bg-[var(--os-accent-secondary)] hover:text-white cursor-default transition-all active:translate-x-1 active:translate-y-1"
             onClick={props.onClick}
         >
             {props.label}

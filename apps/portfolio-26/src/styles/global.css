@@ -1,86 +1,64 @@
 @import "tailwindcss";
 
 @theme {
+    /* Standard Design Tokens */
     --font-geist: "Geist Mono", monospace;
-    --font-inter: "Inter", sans-serif;
-    --color-stripe-navy: #0A2540;
-    --color-stripe-accent: #635BFF;
-    --color-stripe-cyan: #00D4FF;
-    --color-slate-muted: #8792A2;
+    
+    /* Neobrutalist Brand Colors */
+    --color-neo-yellow: #FBE34D;
+    --color-neo-blue: #635BFF;
+    --color-neo-red: #FF5A5A;
+    --color-neo-cyan: #00D4FF;
+    
+    /* Semantic Surface Colors */
+    --color-os-bg: var(--os-bg);
+    --color-os-surface: var(--os-surface);
+    --color-os-text: var(--os-text);
+
+    /* Neobrutalist Shadows */
+    --shadow-neo: 6px 6px 0px #000000;
+    --shadow-neo-sm: 3px 3px 0px #000000;
+    --shadow-neo-active: 1px 1px 0px #000000;
+
+    /* Neobrutalist Borders */
+    --border-neo: 3px solid #000000;
+    --border-neo-thick: 4px solid #000000;
 }
 
 :root {
-    --bg-primary: #f6f9fc;
-    --text-main: #1a1a1a;
-    --text-muted: #555555;
-    
-    /* Modern Retro Glassmorphism */
-    --glass-bg: rgba(255, 255, 255, 0.75);
-    --glass-border: #1a1a1a;
-    --glass-blur: blur(25px) saturate(160%);
-    --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.2);
-    
-    /* Retro Tokens */
-    --retro-stripes: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.05) 0px,
-        rgba(0, 0, 0, 0.05) 1px,
-        transparent 1px,
-        transparent 2px
-    );
-    --window-active-glow: 0 0 20px rgba(99, 91, 255, 0.15);
-    
-    --ease-stripe: cubic-bezier(0.25, 0.1, 0.25, 1);
+    --os-bg: #FBE34D; 
+    --os-surface: #ffffff;
+    --os-text: #000000;
 }
 
 .dark {
-    --bg-primary: #0A0A0B;
-    --text-main: #ffffff;
-    --text-muted: #888888;
-    
-    /* Dark Modern Retro Glassmorphism */
-    --glass-bg: rgba(15, 15, 18, 0.8);
-    --glass-border: #333333;
-    --glass-blur: blur(30px) saturate(180%);
-    --glass-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.8);
-    
-    --retro-stripes: repeating-linear-gradient(
-        0deg,
-        rgba(255, 255, 255, 0.05) 0px,
-        rgba(255, 255, 255, 0.05) 1px,
-        transparent 1px,
-        transparent 2px
-    );
-    --window-active-glow: 0 0 30px rgba(0, 212, 255, 0.2);
+    --os-bg: #0e0e0e;
+    --os-surface: #1a1a1a;
+    --os-text: #ffffff;
 }
 
 body {
-    background-color: var(--bg-primary);
-    color: var(--text-main);
-    font-family: var(--font-inter);
+    background-color: var(--os-bg);
+    color: var(--os-text);
+    font-family: var(--font-geist);
     margin: 0;
     padding: 0;
-    overflow: hidden; /* OS should not scroll */
-    transition: background-color 0.4s var(--ease-stripe);
-    user-select: none; /* Prevents text selection on desktop icons/windows */
+    overflow: hidden;
+    transition: background-color 0.4s ease;
 }
 
-/* Custom Selection */
-::selection {
-    background: var(--color-stripe-accent);
-    color: white;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
 }
 
-/* Glassmorphism utility */
-.stripe-glass {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: var(--glass-blur);
-    box-shadow: var(--glass-shadow);
+::-webkit-scrollbar-track {
+    background-color: var(--os-surface);
+    border-left: 3px solid #000000;
 }
 
-/* Marker utility */
-.marker {
-    @apply absolute text-slate-400 opacity-30 select-none;
-    font-family: monospace;
+::-webkit-scrollbar-thumb {
+    background-color: #635BFF;
+    border: 3px solid #000000;
 }

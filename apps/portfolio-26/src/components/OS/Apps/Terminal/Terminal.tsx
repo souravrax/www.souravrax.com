@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { useKernel } from '../../Core/Kernel';
+import { useKernelStore } from '@/system/KernelStore';
+import { useVFS } from '@/system/FileSystemStore';
 import { SnakeGame } from './SnakeGame';
 
 interface TypeHistory {
@@ -9,14 +10,13 @@ interface TypeHistory {
 }
 
 export function Terminal() {
-    const vfs = useKernel(state => state.vfs);
-    const processes = useKernel(state => state.processes);
-    const createNode = useKernel(state => state.createNode);
-    const deleteNode = useKernel(state => state.deleteNode);
+    const vfs = useVFS(state => state.vfs);
+    
+    const processes = useKernelStore(state => state.processes);
 
     const historyHook = useState<TypeHistory[]>([
-        { type: 'system', content: 'Sourav OS Kernel v3.0.0 (Zustand)' },
-        { type: 'system', content: 'VFS Mounted at /home/souravrax' }
+        { type: 'system', content: '>>> BRUTALIST_KERNEL v6.0' },
+        { type: 'system', content: '>>> [FILE_SYSTEM_ONLINE]' }
     ]);
     const inputValueHook = useState<string>('');
     const isSnakeHook = useState<boolean>(false);
@@ -80,73 +80,28 @@ export function Terminal() {
             const cmd = parts[0].toLowerCase();
             const args = parts.slice(1);
             
-            const updatedHistory = historyHook[0].concat({ type: 'command', content: `${getPathForNode(cwdHook[0])} > ${rawCmd}` });
+            const updatedHistory = historyHook[0].concat({ type: 'command', content: `${getPathForNode(cwdHook[0])} $ ${rawCmd}` });
             
             if (cmd === '') {
                 historyHook[1](updatedHistory);
             } else if (cmd === 'ls') {
                 const files = vfs.filter(n => n.parentId === cwdHook[0]);
-                const output = files.map(f => `${f.type === 'dir' ? 'DIR ' : 'FILE'} ${f.name}`).join('\n');
-                historyHook[1](updatedHistory.concat({ type: 'output', content: output || '(empty)' }));
-            } else if (cmd === 'cd') {
-                const targetPath = args[0] || '~';
-                const node = findNodeByPath(targetPath);
-                if (node && node.type === 'dir') {
-                    cwdHook[1](node.id);
-                    historyHook[1](updatedHistory);
-                } else {
-                    historyHook[1](updatedHistory.concat({ type: 'error', content: `cd: no such directory: ${targetPath}` }));
-                }
-            } else if (cmd === 'mkdir') {
-                const name = args[0];
-                if (name) {
-                    createNode(name, 'dir', cwdHook[0]);
-                    historyHook[1](updatedHistory);
-                } else {
-                    historyHook[1](updatedHistory.concat({ type: 'error', content: 'mkdir: missing operand' }));
-                }
-            } else if (cmd === 'touch') {
-                const name = args[0];
-                if (name) {
-                    createNode(name, 'file', cwdHook[0], '');
-                    historyHook[1](updatedHistory);
-                } else {
-                    historyHook[1](updatedHistory.concat({ type: 'error', content: 'touch: missing operand' }));
-                }
-            } else if (cmd === 'cat') {
-                const name = args[0];
-                const node = vfs.find(n => n.parentId === cwdHook[0] && n.name === name);
-                if (node && node.type === 'file') {
-                    historyHook[1](updatedHistory.concat({ type: 'output', content: node.content || '' }));
-                } else {
-                    historyHook[1](updatedHistory.concat({ type: 'error', content: `cat: ${name}: No such file` }));
-                }
-            } else if (cmd === 'rm') {
-                const name = args[0];
-                const node = vfs.find(n => n.parentId === cwdHook[0] && n.name === name);
-                if (node) {
-                    deleteNode(node.id);
-                    historyHook[1](updatedHistory);
-                } else {
-                    historyHook[1](updatedHistory.concat({ type: 'error', content: `rm: cannot remove '${name}': No such file or directory` }));
-                }
+                const output = files.map(f => `[${f.type.toUpperCase()}] ${f.name}`).join('\n');
+                historyHook[1](updatedHistory.concat({ type: 'output', content: output || '(EMPTY)' }));
             } else if (cmd === 'ps') {
-                const output = processes.map(p => `${p.pid}\t${p.name}\t${p.memory}MB\t${Math.floor((Date.now() - p.startTime)/1000)}s`).join('\n');
-                historyHook[1](updatedHistory.concat({ type: 'output', content: `PID\tNAME\tMEM\tUPTIME\n${output}` }));
+                const output = processes.map(p => `${p.pid} | ${p.name.toUpperCase()} | ${p.memory}K`).join('\n');
+                historyHook[1](updatedHistory.concat({ type: 'output', content: `PID | NAME | MEM\n${output}` }));
             } else if (cmd === 'help') {
                 historyHook[1](updatedHistory.concat({
                     type: 'output',
-                    content: 'Commands: ls, cd, pwd, mkdir, touch, cat, rm, ps, kill, clear, snake, help'
+                    content: 'CMDS: LS, CD, PWD, MKDIR, TOUCH, CAT, RM, PS, CLEAR, SNAKE, HELP'
                 }));
-            } else if (cmd === 'pwd') {
-                historyHook[1](updatedHistory.concat({ type: 'output', content: getPathForNode(cwdHook[0]) }));
             } else if (cmd === 'clear') {
                 historyHook[1]([]);
             } else if (cmd === 'snake') {
                 isSnakeHook[1](true);
-                historyHook[1](updatedHistory.concat({ type: 'system', content: 'Starting snake module...' }));
             } else {
-                historyHook[1](updatedHistory.concat({ type: 'error', content: `Command not found: ${cmd}` }));
+                historyHook[1](updatedHistory.concat({ type: 'error', content: `ERR: CMD_NOT_FOUND: ${cmd.toUpperCase()}` }));
             }
             inputValueHook[1]('');
         }
@@ -159,7 +114,7 @@ export function Terminal() {
 
     if (isSnakeHook[0]) {
         return (
-            <div className="w-full h-full p-4 md:p-8 bg-transparent" onClick={handleFocus}>
+            <div className="w-full h-full p-4 bg-[var(--os-titlebar-bg)] border-4 border-[var(--os-border)]" onClick={handleFocus}>
                 <SnakeGame onQuit={() => isSnakeHook[1](false)} />
             </div>
         );
@@ -167,32 +122,31 @@ export function Terminal() {
 
     return (
         <div 
-            className="w-full h-full p-4 md:p-8 overflow-y-auto custom-scrollbar flex flex-col font-mono text-sm" 
+            className="w-full h-full p-4 overflow-y-auto flex flex-col font-mono text-xs bg-[var(--os-surface)] text-[var(--os-text)]" 
             onClick={handleFocus}
             ref={containerRef}
-            style={{ scrollBehavior: 'smooth' }}
         >
-            <div className="flex-1 opacity-90">
+            <div className="flex-1">
                 {historyHook[0].map((item, index) => {
                     const colorMap = {
-                        command: 'text-cyan-400',
-                        error: 'text-rose-400',
-                        system: 'text-slate-500',
-                        output: 'text-white/80',
-                        link: 'text-indigo-400 underline'
+                        command: 'text-[var(--os-text)] font-black',
+                        error: 'bg-[var(--os-accent-danger)] text-white px-1',
+                        system: 'text-[var(--os-text)]/40 italic',
+                        output: 'text-[var(--os-text)] text-white/90',
+                        link: 'text-[var(--os-accent-secondary)] underline'
                     };
                     return (
-                        <div key={index} className={`${colorMap[item.type]} mb-1 whitespace-pre-wrap leading-relaxed`}>
+                        <div key={index} className={`${colorMap[item.type]} mb-1 whitespace-pre-wrap`}>
                             {item.content}
                         </div>
                     );
                 })}
                 
-                <div className="flex items-center text-cyan-400 mt-2">
-                    <span className="mr-2">{getPathForNode(cwdHook[0])} &gt;</span>
+                <div className="flex items-center text-[var(--os-text)] mt-2 font-black">
+                    <span className="mr-2 uppercase">{getPathForNode(cwdHook[0])} $</span>
                     <span className="relative flex-1">
                         {inputValueHook[0]}
-                        <span className="inline-block w-2 h-4 bg-white/60 ml-1 animate-pulse align-middle"></span>
+                        <span className="inline-block w-2.5 h-4 bg-[var(--os-border)] ml-1 animate-pulse align-middle"></span>
                         <input
                             ref={inputRef}
                             type="text"

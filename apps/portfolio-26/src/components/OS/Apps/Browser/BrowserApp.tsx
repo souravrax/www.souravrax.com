@@ -19,11 +19,10 @@ export function BrowserApp() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-900 overflow-hidden">
-      {/* Browser Toolbar */}
-      <div className="h-10 bg-slate-100 dark:bg-slate-800 border-b border-black/10 dark:border-white/5 flex items-center px-2 gap-2">
+    <div className="flex flex-col h-full bg-[var(--os-surface)] overflow-hidden">
+      <div className="h-10 bg-[var(--os-surface)] border-b border-[var(--os-border)]/10 flex items-center px-2 gap-2">
         <div className="flex gap-1.5 mr-2">
-          <button className="w-6 h-6 flex items-center justify-center rounded hover:bg-black/5 dark:hover:bg-white/5 text-slate-500">
+          <button className="w-6 h-6 flex items-center justify-center rounded hover:bg-[var(--os-border)]/5 text-[var(--os-text)]/50">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -34,7 +33,7 @@ export function BrowserApp() {
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
-          <button className="w-6 h-6 flex items-center justify-center rounded hover:bg-black/5 dark:hover:bg-white/5 text-slate-500">
+          <button className="w-6 h-6 flex items-center justify-center rounded hover:bg-[var(--os-border)]/5 text-[var(--os-text)]/50">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -49,9 +48,9 @@ export function BrowserApp() {
 
         <form
           onSubmit={handleNavigate}
-          className="flex-1 flex items-center bg-white dark:bg-slate-950 border border-black/10 dark:border-white/10 rounded-md px-2 h-7"
+          className="flex-1 flex items-center bg-[var(--os-surface)] border border-[var(--os-border)]/10 rounded-md px-2 h-7"
         >
-          <div className="mr-2 text-slate-400">
+          <div className="mr-2 text-[var(--os-text)]/40">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -67,14 +66,14 @@ export function BrowserApp() {
             type="text"
             value={inputHook[0]}
             onChange={handleInput}
-            className="flex-1 bg-transparent text-[11px] text-slate-700 dark:text-slate-200 outline-none font-mono"
+            className="flex-1 bg-transparent text-[11px] text-[var(--os-text)] outline-none font-mono"
             spellCheck={false}
           />
         </form>
 
         <button
           onClick={handleNavigate}
-          className="w-8 h-7 flex items-center justify-center rounded hover:bg-black/5 dark:hover:bg-white/5 text-slate-500"
+          className="w-8 h-7 flex items-center justify-center rounded hover:bg-[var(--os-border)]/5 text-[var(--os-text)]/50"
         >
           <svg
             viewBox="0 0 24 24"
@@ -89,20 +88,18 @@ export function BrowserApp() {
         </button>
       </div>
 
-      {/* Browser Viewport */}
-      <div className="flex-1 relative bg-white">
+      <div className="flex-1 relative bg-[var(--os-surface)]">
         <iframe
           src={urlHook[0]}
-          className="w-full h-full border-none bg-white"
+          className="w-full h-full border-none bg-[var(--os-surface)]"
           title="Browser Viewport"
           sandbox="allow-scripts allow-same-origin allow-forms"
         />
 
-        {/* Security/CORS overlay reminder (only visible if user navigates to a known blocked site like google) */}
         {urlHook[0].includes("google.com") && (
-          <div className="absolute inset-0 bg-slate-100 flex items-center justify-center p-8 text-center">
+          <div className="absolute inset-0 bg-[var(--os-surface)] flex items-center justify-center p-8 text-center">
             <div className="max-w-xs">
-              <p className="text-xs text-slate-500 mb-4">
+              <p className="text-xs text-[var(--os-text)]/50 mb-4">
                 Note: Sites like Google often block framing for security reasons
                 (X-Frame-Options). Try a developer-friendly site like{" "}
                 <b>astro.build</b> or <b>tailwindcss.com</b>.

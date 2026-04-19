@@ -1,5 +1,7 @@
 import { useRef } from 'react';
-import { useKernel, type OSWindow } from './Kernel';
+import { useKernelStore } from '@/system/KernelStore';
+import type { OSWindow } from '@/system/types';
+import { Panel, TitleBar } from './UI/Primitives';
 
 interface WindowProps {
     window: OSWindow;
@@ -7,10 +9,10 @@ interface WindowProps {
 }
 
 export function Window(props: WindowProps) {
-    const focusWindow = useKernel(state => state.focusWindow);
-    const closeWindow = useKernel(state => state.closeWindow);
-    const updateWindowPos = useKernel(state => state.updateWindowPos);
-    const updateWindowSize = useKernel(state => state.updateWindowSize);
+    const focusWindow = useKernelStore(state => state.focusWindow);
+    const closeWindow = useKernelStore(state => state.closeWindow);
+    const updateWindowPos = useKernelStore(state => state.updateWindowPos);
+    const updateWindowSize = useKernelStore(state => state.updateWindowSize);
 
     const draggingRef = useRef<{ startX: number; startY: number; windowX: number; windowY: number } | null>(null);
     const resizingRef = useRef<{ startX: number; startY: number; startW: number; startH: number } | null>(null);
@@ -75,8 +77,8 @@ export function Window(props: WindowProps) {
     };
 
     return (
-        <div 
-            className={`absolute flex flex-col stripe-glass rounded-lg border border-black/30 dark:border-white/10 shadow-2xl transition-[box-shadow] duration-200 ${props.window.z > 50 ? 'shadow-[var(--window-active-glow)]' : ''}`}
+        <Panel 
+            className="absolute flex flex-col select-none transition-shadow duration-100 overflow-hidden"
             style={{ 
                 left: `${props.window.x}px`, 
                 top: `${props.window.y}px`, 
@@ -86,30 +88,21 @@ export function Window(props: WindowProps) {
             }}
             onMouseDown={handleMouseDown}
         >
-            <div className="window-title-bar h-8 w-full bg-slate-200/50 dark:bg-white/5 border-b border-black/10 dark:border-white/5 flex items-center px-3 cursor-default select-none relative flex-shrink-0">
-                <div className="absolute inset-x-4 inset-y-2 opacity-20 pointer-events-none" style={{ background: 'var(--retro-stripes)' }}></div>
-                
-                <div className="window-controls flex gap-2 mr-4 z-10">
-                    <button 
-                        onClick={() => closeWindow(props.window.id)}
-                        className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors border border-black/10"
-                    ></button>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80 border border-black/10"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500/80 border border-black/10"></div>
-                </div>
+            <TitleBar 
+                className="window-title-bar"
+                title={props.window.title}
+                active={props.window.z > 50}
+                onClose={() => closeWindow(props.window.id)}
+                onMinimize={() => {}}
+            />
 
-                <div className="flex-1 text-center text-xs font-bold tracking-wider text-slate-700 dark:text-slate-300 z-10 pointer-events-none">
-                    {props.window.title}
-                </div>
-            </div>
-
-            <div className="flex-1 overflow-hidden relative bg-black/10 dark:bg-black/40 backdrop-blur-xl">
+            <div className={`flex-1 overflow-hidden relative ${props.window.z > 50 ? 'bg-[var(--os-surface)]' : 'bg-[var(--os-surface)]/50'}`}>
                 {props.children}
                 
-                <div className="window-resizer absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize z-50 flex items-center justify-center group">
-                    <div className="w-1.5 h-1.5 border-r-2 border-b-2 border-slate-400 dark:border-slate-600 opacity-40 group-hover:opacity-100 transition-opacity"></div>
+                <div className="window-resizer absolute bottom-0 right-0 w-6 h-6 cursor-nwse-resize z-50 flex items-end justify-end p-1">
+                    <div className="w-3 h-3 border-r-2 border-b-2 border-[var(--os-border)] opacity-50"></div>
                 </div>
             </div>
-        </div>
+        </Panel>
     );
 }

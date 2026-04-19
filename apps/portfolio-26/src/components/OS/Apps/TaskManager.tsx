@@ -1,9 +1,12 @@
-import { useKernel } from "../Core/Kernel";
+import { useKernelStore } from "@/system/KernelStore";
+import { useSystemResources } from "@/hooks/useSystemResources";
 
 export function TaskManager() {
-  const processes = useKernel(state => state.processes);
-  const windows = useKernel(state => state.windows);
-  const closeWindow = useKernel(state => state.closeWindow);
+  const processes = useKernelStore(state => state.processes);
+  const windows = useKernelStore(state => state.windows);
+  const closeWindow = useKernelStore(state => state.closeWindow);
+  
+  const resources = useSystemResources();
 
   const handleKill = (pid: number) => {
     const target = windows.find(w => w.pid === pid);
@@ -13,53 +16,53 @@ export function TaskManager() {
   };
 
   return (
-    <div className="h-full bg-[#f6f9fc] dark:bg-[#0A0A0B] flex flex-col font-inter">
-      <div className="p-4 border-b border-black/10 dark:border-white/5 bg-slate-100/50 dark:bg-white/5 flex justify-between items-center">
-        <h2 className="text-xs font-bold tracking-widest uppercase text-slate-500">
-          Active Processes
+    <div className="h-full flex flex-col font-mono text-[10px] bg-[var(--os-surface)] text-[var(--os-text)] uppercase">
+      <div className="p-3 border-b-4 border-[var(--os-border)] flex justify-between items-center bg-[var(--os-accent-primary)] text-[var(--os-text)]">
+        <h2 className="font-black tracking-widest text-[11px]">
+          [PROCESS_MONITOR]
         </h2>
-        <div className="text-[10px] font-mono opacity-50">
-          {processes.length} tasks running
+        <div className="font-black border-2 border-[var(--os-border)] px-2 bg-[var(--os-surface)]">
+          TASKS: {processes.length}
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-black/5 dark:bg-white/5 text-slate-400 font-mono uppercase text-[9px]">
+      <div className="flex-1 overflow-auto p-1">
+        <table className="w-full text-left border-2 border-[var(--os-border)] border-collapse">
+          <thead className="bg-[var(--os-titlebar-bg)] text-[var(--os-titlebar-text)]">
             <tr>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">PID</th>
-              <th className="px-4 py-2">Memory</th>
-              <th className="px-4 py-2 text-right">Actions</th>
+              <th className="px-2 py-1 border-r-2 border-[var(--os-border)]">PROCESS</th>
+              <th className="px-2 py-1 border-r-2 border-[var(--os-border)]">PID</th>
+              <th className="px-2 py-1 border-r-2 border-[var(--os-border)]">RES_K</th>
+              <th className="px-2 py-1 text-right">ACTION</th>
             </tr>
           </thead>
           <tbody>
             {processes.map((proc) => (
               <tr
                 key={proc.pid}
-                className="border-b border-black/5 dark:border-white/5 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                className="border-b-2 border-[var(--os-border)] hover:bg-[var(--os-accent-secondary)] hover:text-white transition-colors cursor-default font-black"
               >
-                <td className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">
+                <td className="px-2 py-2 border-r-2 border-[var(--os-border)]">
                   {proc.name}
                 </td>
-                <td className="px-4 py-3 font-mono opacity-50">{proc.pid}</td>
-                <td className="px-4 py-3">
+                <td className="px-2 py-2 border-r-2 border-[var(--os-border)] opacity-70">{proc.pid}</td>
+                <td className="px-2 py-2 border-r-2 border-[var(--os-border)]">
                   <div className="flex items-center gap-2">
-                    <div className="w-16 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div className="w-14 h-3 border-2 border-[var(--os-border)] bg-[var(--os-surface)] overflow-hidden">
                       <div
-                        className="h-full bg-cyan-500/50"
+                        className="h-full bg-[var(--os-titlebar-bg)]/80"
                         style={{ width: `${(proc.memory / 60) * 100}%` }}
                       ></div>
                     </div>
-                    <span className="font-mono text-[10px]">{proc.memory}MB</span>
+                    <span>{proc.memory}K</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-2 py-2 text-right">
                   <button
                     onClick={() => handleKill(proc.pid)}
-                    className="px-2 py-1 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 rounded text-[10px] transition-all font-bold"
+                    className="h-6 px-3 bg-[var(--os-accent-danger)] text-white border-2 border-[var(--os-border)] shadow-[3px_3px_0px_var(--os-shadow)] font-black active:shadow-none active:translate-x-0.5 active:translate-y-0.5 transition-all text-[9px]"
                   >
-                    Kill
+                    KILL
                   </button>
                 </td>
               </tr>
@@ -68,17 +71,11 @@ export function TaskManager() {
         </table>
       </div>
 
-      <div className="p-3 bg-slate-100/50 dark:bg-white/5 border-t border-black/10 dark:border-white/5 flex justify-between items-center">
-        <div className="flex gap-4">
-          <Stat label="CPU" value="4.2%" />
-          <Stat
-            label="RAM"
-            value={`${processes.reduce((a, b) => a + Number(b.memory), 0)}MB`}
-          />
-        </div>
-        <div className="text-[9px] font-mono text-slate-400">
-          System Uptime: {Math.floor(performance.now() / 1000)}s
-        </div>
+      <div className="p-3 bg-[var(--os-titlebar-bg)] text-[var(--os-titlebar-text)] grid grid-cols-4 gap-2 border-t-4 border-[var(--os-border)]">
+         <Stat label="CPU_LOAD" value="4.2%" />
+         <Stat label="RAM_PHYS" value={`${resources.deviceMemory || '?' }G`} />
+         <Stat label="CORES" value={String(resources.hardwareConcurrency)} />
+         <Stat label="UP" value={`${Math.floor(performance.now() / 1000)}S`} />
       </div>
     </div>
   );
@@ -86,11 +83,11 @@ export function TaskManager() {
 
 function Stat(props: { label: string; value: string }) {
   return (
-    <div className="flex flex-col">
-      <span className="text-[9px] uppercase tracking-tighter text-slate-400">
+    <div className="flex flex-col items-center">
+      <span className="text-[7px] font-black opacity-60 leading-none mb-1">
         {props.label}
       </span>
-      <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300">
+      <span className="text-[10px] font-black text-[var(--os-accent-primary)]">
         {props.value}
       </span>
     </div>
