@@ -1,0 +1,14 @@
+{
+  "name": "@souravrax/blog-content",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts"
+  },
+  "dependencies": {
+    "astro": "^6.1.8",
+    "zod": "^3.24.1"
+  }
+}

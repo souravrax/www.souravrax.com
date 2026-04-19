@@ -2,3 +2,4 @@
 projects:
   p25: 'apps/portfolio-25'
   p26: 'apps/portfolio-26'
+  pkg-blog-content: 'packages/blog-content'

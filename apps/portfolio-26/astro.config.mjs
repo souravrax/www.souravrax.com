@@ -12,6 +12,11 @@ export default defineConfig({
   site: "https://souravrax.com",
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      fs: {
+        allow: ["../../"],
+      },
+    },
   },
   integrations: [mdx(), sitemap(), preact()],
   fonts: [
