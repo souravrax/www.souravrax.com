@@ -5,6 +5,13 @@ stack: 'frontend'
 
 tasks:
   build:
-    command: 'echo "Building latest project..."'
+    command: 'pnpm run build'
+    inputs:
+      - 'src/**/*'
+      - 'public/**/*'
+      - 'astro.config.mjs'
+      - 'tsconfig.json'
+    outputs:
+      - 'dist'
   dev:
-    command: 'echo "Running latest project in dev mode..."'
+    command: 'pnpm run dev'

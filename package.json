@@ -1,5 +1,5 @@
 {
-  "name": "souravrax-portfolio-monorepo",
+  "name": "@souravrax/monorepo",
   "private": true,
   "engines": {
     "node": ">=20.0.0"
