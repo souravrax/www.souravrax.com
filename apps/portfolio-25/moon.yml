@@ -1,0 +1,17 @@
+# https://moonrepo.dev/docs/config/project
+language: 'typescript'
+
+stack: 'frontend'
+
+tasks:
+  build:
+    command: 'pnpm run build'
+    inputs:
+      - 'src/**/*'
+      - 'public/**/*'
+      - 'astro.config.mjs'
+      - 'tsconfig.json'
+    outputs:
+      - 'dist'
+  dev:
+    command: 'pnpm run dev'

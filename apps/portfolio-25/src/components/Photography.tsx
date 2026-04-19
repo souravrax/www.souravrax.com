@@ -47,11 +47,12 @@ function PhotographyContent() {
           }}
         >
           <div className="w-[100vw] h-full"> </div>
+          <h1 className="text-7xl font-array">Some Photos I have taken</h1>
           {showcase.map((content, i) => {
             return (
               <div
                 key={`${i}-showcase-${content.alt}`}
-                className="h-full w-[90vw] max-w-[500px] block relative rounded-3xl overflow-hidden border-2 border-foreground"
+                className="w-[90vw] max-w-[500px] block relative rounded-3xl overflow-hidden"
               >
                 <MotionImage
                   src={content.src}
@@ -118,7 +119,7 @@ function WriteSection({
           className={cn(
             "text-foreground text-7xl lg:text-[10rem]",
             "font-array",
-            className
+            className,
           )}
         >
           {text.split("").map((char, i) => {

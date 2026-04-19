@@ -1,0 +1,4 @@
+# https://moonrepo.dev/docs/config/workspace
+projects:
+  p25: 'apps/portfolio-25'
+  p26: 'apps/portfolio-26'

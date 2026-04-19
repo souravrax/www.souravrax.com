@@ -33,7 +33,7 @@ export default function Projects() {
           <motion.h1
             className={cn(
               "font-array",
-              "text-7xl lg:text-[10rem] text-center px-4"
+              "text-7xl lg:text-[10rem] text-center px-4",
             )}
             style={{
               scale,
@@ -132,7 +132,7 @@ function ProjectCard({
   const scale = useTransform(
     scrollYProgress,
     [lowRange, 1 + lowRange],
-    [1, scaleRange]
+    [1, scaleRange],
   );
   const grayMotionValue = useTransform(scrollYProgress, [0, lowRange], [1, 0]);
   const grayscale = useTransform(grayMotionValue, (value) => {
@@ -150,7 +150,7 @@ function ProjectCard({
       >
         <MotionImage
           src={`/images/project-card/${i + 1}.png`}
-          className={cn("object-cover absolute -z-10")}
+          className={cn("size-full object-cover absolute -z-10")}
           style={{
             filter: grayscale as any,
           }}
@@ -161,8 +161,8 @@ function ProjectCard({
           <div className="rounded-3xl p-4 space-y-4">
             <h2
               className={cn(
-                "text-2xl md:text-4xl lg:text-6xl font-bold text-accent",
-                "font-array"
+                "text-2xl md:text-4xl lg:text-6xl text-accent",
+                "font-array",
               )}
             >
               {title}
@@ -207,11 +207,11 @@ function ProjectCard({
             </div>
           </div>
           <div className="rounded-3xl p-4">
-            <div className="h-full w-full relative rounded-2xl overflow-hidden">
+            <div className="h-full w-full relative overflow-hidden flex justify-center items-center">
               {projectImage && (
                 <motion.img
                   src={`/images/projects/${projectImage}`}
-                  className="object-cover absolute"
+                  className="absolute rounded-2xl"
                   alt="image"
                 />
               )}

@@ -1,3 +1,6 @@
+# moonrepo
+.moon/cache
+
 # build output
 dist/
 # generated types

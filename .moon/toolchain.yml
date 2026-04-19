@@ -1,0 +1,7 @@
+# https://moonrepo.dev/docs/config/toolchain
+node:
+  version: '22.19.0'
+  packageManager: 'pnpm'
+
+typescript:
+  syncProjectReferences: true

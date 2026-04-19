@@ -1,0 +1,10 @@
+# https://moonrepo.dev/docs/config/project
+language: 'typescript'
+
+stack: 'frontend'
+
+tasks:
+  build:
+    command: 'echo "Building latest project..."'
+  dev:
+    command: 'echo "Running latest project in dev mode..."'

@@ -29,4 +29,7 @@ export default defineConfig({
   ],
 
   adapter: vercel(),
+  server: {
+    host: "0.0.0.0",
+  },
 });

@@ -81,7 +81,7 @@ export default function Hero() {
           transition={{
             ease: "easeInOut",
           }}
-          className="-z-10"
+          className="-z-10 size-full object-cover"
         />
         <div className="absolute top-0 left-0 right-0 bottom-0 bg-background opacity-20 z-10"></div>
         <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-black to-transparent z-10"></div>
@@ -114,8 +114,7 @@ export default function Hero() {
       >
         <motion.h1
           className={cn(
-            "text-[3.5rem] text-nowrap md:text-[6rem] lg:text-[10rem] md:leading-[9rem] font-black text-accent",
-            "font-array"
+            "font-array text-[3.5rem] text-nowrap md:text-[6rem] lg:text-[10rem] md:leading-[9rem] text-accent",
           )}
           variants={child}
         >
@@ -123,8 +122,8 @@ export default function Hero() {
         </motion.h1>
         <motion.h2
           className={cn(
-            "uppercase text-4xl text-nowrap md:text-5xl lg:text-7xl",
-            "font-array"
+            "text-4xl text-nowrap md:text-5xl lg:text-7xl font-bold",
+            "font-sans",
           )}
           variants={child}
         >
@@ -138,8 +137,8 @@ export default function Hero() {
         </motion.p>
         <motion.h2
           className={cn(
-            "uppercase text-4xl text-nowrap md:text-5xl lg:text-7xl",
-            "font-array"
+            "text-2xl text-nowrap md:text-3xl lg:text-5xl font-bold mb-2",
+            "font-sans",
           )}
           variants={child}
         >
@@ -151,40 +150,17 @@ export default function Hero() {
         >
           by hobby
         </motion.p>
-        <motion.p
-          variants={child}
-          className={cn("font-array", "text-xl md:text-2xl")}
-        >
-          <motion.span className="text-base md:text-xl">Currently </motion.span>
+        <motion.p variants={child} className={cn("font-sans", "text-lg")}>
+          <motion.span className="">Working </motion.span>
           <Link
-            href="https://fabric.inc/"
+            href="https://google.com/"
             target="_blank"
-            className={cn("text-accent hover:underline", "font-array")}
+            className={cn("text-accent hover:underline font-google font-bold")}
             rel="noopener noreferrer"
           >
-            @fabric.inc
+            @Google
           </Link>
         </motion.p>
-        <motion.div
-          variants={child}
-          className={cn(
-            "font-array",
-            "text-xl md:text-2xl flex items-center gap-1"
-          )}
-        >
-          <motion.span className="text-base md:text-xl">Based in</motion.span>
-          <Link
-            href="https://fabric.inc/"
-            rel="noopener noreferrer"
-            target="_blank"
-            className={cn(
-              "text-accent flex items-center hover:underline",
-              "font-array"
-            )}
-          >
-            WB, India
-          </Link>
-        </motion.div>
       </motion.div>
     </motion.section>
   );

@@ -14,6 +14,8 @@
   --color-foreground: var(--foreground);
   --font-khand: "Khand", "sans-serif";
   --font-array: "Array", "sans-serif";
+  --font-sans: "Khand", "sans-serif";
+  --font-google: "Google Sans", "sans-serif";
 }
 
 @layer utilities {
