@@ -2,9 +2,14 @@ import { useState } from "react";
 import { useVFS } from "@/system/FileSystemStore";
 import { useBattery } from "@/hooks/useBattery";
 import { useNetwork } from "@/hooks/useNetwork";
-import { BatteryIcon, SignalIcon } from "../Shared/Icons";
+import { BatteryIcon, SignalIcon, LockIcon } from "../Shared/Icons";
 import { Panel } from "../Core/UI/Primitives";
 import { StartButton } from "./StartButton";
+
+const handleLock = () => {
+  sessionStorage.setItem("sourav_os_locked", "true");
+  window.dispatchEvent(new CustomEvent("sourav-os-lock"));
+};
 
 export function MenuBar() {
   const vfs = useVFS((state) => state.vfs);
@@ -58,6 +63,14 @@ export function MenuBar() {
               minute: "2-digit",
             })}
           </div>
+
+          <button
+            onClick={handleLock}
+            className="ml-2 w-7 h-7 flex items-center justify-center border-2 border-[var(--os-border)] bg-[var(--os-surface)] hover:bg-[var(--os-accent-danger)] hover:text-white transition-colors"
+            title="Lock Screen"
+          >
+            <LockIcon />
+          </button>
         </Panel>
       </div>
     </div>
